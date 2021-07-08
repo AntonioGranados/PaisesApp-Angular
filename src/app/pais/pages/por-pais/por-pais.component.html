@@ -1,16 +1,32 @@
-<h2>Por País</h2>
-<hr>
-
-<div class="row">
-    <div class="col">
-        <app-pais-input (onEnter)="buscarPais($event)" 
-                        (onDebounce)="sugerencias($event)" 
-                        placeholder="Buscar Pais...">
-        </app-pais-input>
+<div class="animate__animated animate__fadeIn animate__faster">
+    <h2>Por País</h2>
+    <hr>
+    
+    <div class="row">
+        <div class="col">
+            <app-pais-input (onEnter)="buscarPais($event)" 
+                            (onDebounce)="sugerencias($event)" 
+                            placeholder="Buscar Pais...">
+            </app-pais-input>
+        </div>
     </div>
-</div>
 
-<hr>
+    <!-- Caja de sugerencias - autocomplete -->
+    <ul class="list-group" *ngIf="mostrarSugerencias">
+        <li class="list-group-item list-group-item-action" *ngFor="let pais of paisesSugeridos">
+            <a [routerLink]="['/pais', pais.alpha2Code]" class="nav-link">
+                {{pais.name}}
+            </a>
+        </li>
+        <li class="list-group-item list-group-item-action" (click)="buscarSugerido(paisABuscar)">
+            <a class="nav-link">
+                Buscar "{{paisABuscar}}"
+            </a>
+        </li>
+    </ul>
+    <hr>
+</div>
+    
 
 <div class="col" *ngIf="paises.length <= 0 && !hayError">
     <h2>No has realizado ninguna búsqueda...</h2>

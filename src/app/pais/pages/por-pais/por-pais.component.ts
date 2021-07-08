@@ -12,6 +12,10 @@ import { Pais } from '../../interfaces/paises-interface';
         height: 200px;
       }
 
+      li {
+        cursor: pointer;
+      }
+
       .busqueda {
         width: 350px;
         height: 350px;
@@ -29,9 +33,13 @@ export class PorPaisComponent {
   hayError: boolean = false;
   paises: Pais[] = [];
 
+  paisesSugeridos: Pais[] = [];
+  mostrarSugerencias: boolean = false;
+
   constructor(private paisService: PaisService) { }
 
   buscarPais(paisABuscar: string) {
+    this.mostrarSugerencias = false;
     this.hayError = false;
 
     //el pais a buscar será igual al pais que recibo como argumento que viene del input
@@ -46,7 +54,19 @@ export class PorPaisComponent {
     });
   }
 
-  sugerencias(paisABuscar: string) {
+  sugerencias(termino: string) {
     this.hayError = false;
+    this.paisABuscar = termino;
+    this.mostrarSugerencias = true;
+
+    this.paisService.buscarPais(termino).subscribe(paises => {
+      this.paisesSugeridos = paises.splice(0,5);
+    }, (error) => {
+      this.paisesSugeridos = [];
+    });
+  }
+
+  buscarSugerido(termino: string) {
+    this.buscarPais(termino);
   }
 }
